@@ -30,19 +30,19 @@ services:
       - "MYSQL_ROOT_PASSWORD=yeet_password"
     networks:
       - yeetnet
-  yeetbot:
-    container_name: yeetbot
-    build:
-      context: ./yeetbot
-      dockerfile: Dockerfile
-    volumes:
-      - ./yeetbot/:/yeetbot
-    ports:
-      - "5000:80"
-    depends_on:
-      - yeetapp
-    networks:
-      - yeetnet
+  # yeetbot:
+  #   container_name: yeetbot
+  #   build:
+  #     context: ./yeetbot
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./yeetbot/:/yeetbot
+  #   ports:
+  #     - "5000:80"
+  #   depends_on:
+  #     - yeetapp
+  #   networks:
+  #     - yeetnet
   yeetapp:
     build:
       context: ./yeet
