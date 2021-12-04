@@ -22,12 +22,7 @@ git clone https://github.com/olamileke/yeet.git
 ```
 git clone https://github.com/olamileke/yeetbot.git
 ```
-Remember to make sure that the relevant environment variables are set in the yeet and yeetbot applications in the .env file. Still in the /yeet-docker folder create a mysql folder by running
+Remember to make sure that the relevant environment variables are set in the yeet and yeetbot applications in the .env file. Still in the /yeet-docker folder create the certbot, certbot-etc, certbot-var and mysql folders by running the following command.
 ```
-mkdir mysql
+mkdir certbot certbot-etc certbot-var mysql
 ```
-Finally, bring up the entire application by running
-```
- docker-compose up -d
-```
- Access the application at http://localhost:8000 while the bot should also be running at whatever telegram bot whose token you set.
