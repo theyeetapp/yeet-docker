@@ -6,8 +6,13 @@ services:
     container_name: webserver
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./yeet:/var/www/vhosts/yeet
+      - ./certbot:/var/www/certbot
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+      - ./dhparam:/etc/ssl/certs
     depends_on:   
       - yeetapp
       - yeetdb
@@ -17,7 +22,6 @@ services:
   yeetdb:
     image: mysql
     container_name: yeetdb
-    restart: unless-stopped
     tty: true
     ports:
       - "4306:3306"
@@ -30,19 +34,19 @@ services:
       - "MYSQL_ROOT_PASSWORD=yeet_password"
     networks:
       - yeetnet
-  yeetbot:
-    container_name: yeetbot
-    build:
-      context: ./yeetbot
-      dockerfile: Dockerfile
-    volumes:
-      - ./yeetbot/:/yeetbot
-    ports:
-      - "5000:80"
-    depends_on:
-      - yeetapp
-    networks:
-      - yeetnet
+#  yeetbot:
+#    container_name: yeetbot
+#    build:
+#      context: ./yeetbot
+#      dockerfile: Dockerfile
+#    volumes:
+#      - ./yeetbot/:/yeetbot
+#    ports:
+#      - "5000:80"
+#    depends_on:
+#      - yeetapp
+#    networks:
+#      - yeetnet
   yeetapp:
     build:
       context: ./yeet
@@ -54,6 +58,19 @@ services:
       - "9000:9000"
     networks:
       - yeetnet
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot:/var/www/certbot
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+      - ./yeet:/var/www/vhosts/yeet
+    depends_on:
+      - webserver
+    networks:
+      - yeetnet
+    command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d theyeetapp.com  -d www.theyeetapp.com 
 networks:
   yeetnet:
     driver: bridge
