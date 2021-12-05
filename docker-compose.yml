@@ -9,6 +9,7 @@ services:
       - "443:443"
     volumes:
       - ./yeet:/var/www/vhosts/yeet
+      - ./yeetbot:/var/www/vhosts/yeetbot
       - ./certbot:/var/www/certbot
       - ./certbot-etc:/etc/letsencrypt
       - ./certbot-var:/var/lib/letsencrypt
@@ -16,7 +17,6 @@ services:
     depends_on:   
       - yeetapp
       - yeetdb
-      # - yeetbot
     networks:
       - yeetnet
   yeetdb:
@@ -34,19 +34,19 @@ services:
       - "MYSQL_ROOT_PASSWORD=yeet_password"
     networks:
       - yeetnet
-#  yeetbot:
-#    container_name: yeetbot
-#    build:
-#      context: ./yeetbot
-#      dockerfile: Dockerfile
-#    volumes:
-#      - ./yeetbot/:/yeetbot
-#    ports:
-#      - "5000:80"
-#    depends_on:
-#      - yeetapp
-#    networks:
-#      - yeetnet
+  yeetbot:
+    container_name: yeetbot
+    build:
+     context: ./yeetbot
+     dockerfile: Dockerfile
+    volumes:
+     - ./yeetbot:/yeetbot
+    depends_on:
+     - webserver
+    ports:
+      - "5000:5000"
+    networks:
+     - yeetnet
   yeetapp:
     build:
       context: ./yeet
@@ -58,19 +58,19 @@ services:
       - "9000:9000"
     networks:
       - yeetnet
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - ./certbot:/var/www/certbot
-      - ./certbot-etc:/etc/letsencrypt
-      - ./certbot-var:/var/lib/letsencrypt
-      - ./yeet:/var/www/vhosts/yeet
-    depends_on:
-      - webserver
-    networks:
-      - yeetnet
-    command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d theyeetapp.com  -d www.theyeetapp.com 
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - ./certbot:/var/www/certbot
+  #     - ./certbot-etc:/etc/letsencrypt
+  #     - ./certbot-var:/var/lib/letsencrypt
+  #     - ./yeet:/var/www/vhosts/yeet
+  #   depends_on:
+  #     - webserver
+  #   networks:
+  #     - yeetnet
+    # command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d theyeetapp.com  -d www.theyeetapp.com -d bot.theyeetapp.com
 networks:
   yeetnet:
     driver: bridge
