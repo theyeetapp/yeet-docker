@@ -70,7 +70,7 @@ services:
   #     - webserver
   #   networks:
   #     - yeetnet
-    # command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d theyeetapp.com  -d www.theyeetapp.com -d bot.theyeetapp.com
+  #   command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d theyeetapp.com
 networks:
   yeetnet:
     driver: bridge
